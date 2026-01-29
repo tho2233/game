@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Jam Digital</title>
+  <style>
+    body {
+      font-family: 'Courier New', monospace;
+      background: linear-gradient(135deg, #000428, #004e92);
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+    }
+
+    .clock {
+      background: rgba(0, 0, 0, 0.6);
+      padding: 30px 50px;
+      border-radius: 15px;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    }
+
+    #time {
+      font-size: 48px;
+      letter-spacing: 3px;
+    }
+
+    #date {
+      margin-top: 10px;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="clock">
+    <div id="time">00:00:00</div>
+    <div id="date">Loading...</div>
+  </div>
+
+  <script>
+    function updateClock() {
+      const now = new Date();
+
+      let jam = now.getHours();
+      let menit = now.getMinutes();
+      let detik = now.getSeconds();
+
+      // biar selalu 2 digit
+      jam = jam < 10 ? "0" + jam : jam;
+      menit = menit < 10 ? "0" + menit : menit;
+      detik = detik < 10 ? "0" + detik : detik;
+
+      document.getElementById("time").innerHTML =
+        jam + ":" + menit + ":" + detik;
+
+      const hari = ["Minggu","Senin","Selasa","Rabu","Kamis","Jumat","Sabtu"];
+      const bulan = ["Januari","Februari","Maret","April","Mei","Juni",
+                     "Juli","Agustus","September","Oktober","November","Desember"];
+
+      document.getElementById("date").innerHTML =
+        hari[now.getDay()] + ", " +
+        now.getDate() + " " +
+        bulan[now.getMonth()] + " " +
+        now.getFullYear();
+    }
+
+    // update tiap 1 detik
+    setInterval(updateClock, 1000);
+    updateClock();
+  </script>
+
+</body>
+</html>
