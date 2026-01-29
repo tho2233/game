@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Tebak Angka</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #43cea2, #185a9d);
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .game-box {
+      background: white;
+      padding: 25px;
+      border-radius: 10px;
+      width: 320px;
+      text-align: center;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      font-size: 16px;
+      text-align: center;
+    }
+
+    button {
+      padding: 10px 20px;
+      background: #185a9d;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    button:hover {
+      background: #144a80;
+    }
+
+    .hasil {
+      margin-top: 15px;
+      font-weight: bold;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="game-box">
+    <h2>🎯 Tebak Angka</h2>
+    <p>Masukkan angka 1 – 10</p>
+
+    <input type="number" id="tebakan" min="1" max="10">
+    <button onclick="cekAngka()">Tebak</button>
+
+    <div class="hasil" id="hasil"></div>
+  </div>
+
+  <script>
+    // angka acak 1–10
+    let angkaRahasia = Math.floor(Math.random() * 10) + 1;
+
+    function cekAngka() {
+      let tebakan = document.getElementById("tebakan").value;
+      let hasil = document.getElementById("hasil");
+
+      if (tebakan == "") {
+        hasil.style.color = "orange";
+        hasil.innerHTML = "Masukin angkanya dulu 😅";
+      } else if (tebakan == angkaRahasia) {
+        hasil.style.color = "green";
+        hasil.innerHTML = "🎉 Benar! Angkanya " + angkaRahasia;
+      } else if (tebakan < angkaRahasia) {
+        hasil.style.color = "orange";
+        hasil.innerHTML = "Terlalu kecil 📉";
+      } else {
+        hasil.style.color = "red";
+        hasil.innerHTML = "Terlalu besar 📈";
+      }
+    }
+  </script>
+
+</body>
+</html>
