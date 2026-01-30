@@ -32,24 +32,26 @@
       border-radius: 6px;
     }
 
-    .board {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 5px;
-      margin: 15px 0;
-    }
+   .board {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 3vw;
+  margin: 15px auto;
+  width: 90vw;
+  max-width: 320px;
+}
 
-    .cell {
-      width: 80px;
-      height: 80px;
-      background: #1e293b;
-      font-size: 2rem;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      cursor: pointer;
-      border-radius: 8px;
-    }
+.cell {
+  aspect-ratio: 1 / 1;
+  background: #1e293b;
+  font-size: 12vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  border-radius: 12px;
+}
+
 
     .cell:hover {
       background: #334155;
@@ -236,3 +238,4 @@
 
 </body>
 </html>
+
