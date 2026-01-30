@@ -78,7 +78,7 @@ button:hover {
 
 <body>
 <div class="container">
-    <h1>Tic Tac Toe AI</h1>
+    <h1>Tic Tac Toe</h1>
 
     <select id="difficulty">
         <option value="easy">Mudah</option>
@@ -122,7 +122,7 @@ function playerMove(i) {
     updateBoard();
 
     if (checkWinner("X")) {
-        statusEl.textContent = "🎉 Kamu menang!";
+        statusEl.textContent = "puh sepuh, ampun puh";
         gameOver = true;
         return;
     }
@@ -148,7 +148,7 @@ function aiMove() {
     updateBoard();
 
     if (checkWinner("O")) {
-        statusEl.textContent = "😈 AI menang!";
+        statusEl.textContent = "astaga kalah?";
         gameOver = true;
     }
 }
