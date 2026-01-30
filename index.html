@@ -80,6 +80,23 @@
       margin-top: 10px;
       min-height: 20px;
     }
+    @media (orientation: landscape) {
+  .game {
+    flex-direction: row;
+    justify-content: space-evenly;
+  }
+
+  .controls {
+    order: 1;
+  }
+
+  .board {
+    order: 2;
+    width: 60vmin;
+    height: 60vmin;
+  }
+}
+
   </style>
 </head>
 <body>
