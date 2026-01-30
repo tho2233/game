@@ -1,277 +1,266 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-<div class="controls">
-  <h1>Tic Tac Toe AI</h1>
-  <select id="difficulty">...</select>
-  <button onclick="resetGame()">Reset</button>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tic Tac Toe AI</title>
 
   <style>
-    body {
+    /* ===== RESET ===== */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
       font-family: Arial, sans-serif;
-      background: #0f172a;
-      color: #e5e7eb;
+    }
+
+    /* ===== BACKGROUND (BUKAN HITAM) ===== */
+    body {
+      min-height: 100dvh;
+      background: linear-gradient(135deg, #0f172a, #1e3a8a);
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
     }
 
+    /* ===== CONTAINER UTAMA ===== */
     .game {
-       width: 100vw;
-  min-height: 100dvh;
-  background: #020617;
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-      
+      width: 100vw;
+      min-height: 100dvh;
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(10px);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* ===== KONTROL ===== */
+    .controls {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
     }
 
     h1 {
-      margin-bottom: 8px;
+      color: #ffffff;
+      font-size: 1.5rem;
     }
 
     select {
-      padding: 6px;
-      margin-bottom: 8px;
-      border-radius: 6px;
-    }
-    .controls {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-}
-
-    }
-   .board {
-  width: 80vmin;
-  height: 80vmin;
-  max-width: 420px;
-  max-height: 420px;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 4vmin;
-  margin: 16px 0;
-}
-
-
-.cell {
-  aspect-ratio: 1 / 1;
-   background: #1e293b;
-  border-radius: 16px;
-  font-size: 10vmin;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-}
-
-
-    .cell:hover {
-      background: #334155;
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: none;
     }
 
     button {
-      padding: 8px 12px;
+      padding: 8px 16px;
+      border-radius: 10px;
       border: none;
-      border-radius: 8px;
-      cursor: pointer;
       background: #2563eb;
       color: white;
-      margin-top: 10px;
+      cursor: pointer;
+    }
+
+    /* ===== BOARD ===== */
+    .board {
+      width: 80vmin;
+      height: 80vmin;
+      max-width: 420px;
+      max-height: 420px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 4vmin;
+    }
+
+    .cell {
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 16px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 10vmin;
+      color: #ffffff;
+      cursor: pointer;
+      user-select: none;
     }
 
     .status {
-      margin-top: 10px;
+      margin-top: 14px;
+      color: #e5e7eb;
       min-height: 20px;
     }
+
+    /* ===== LANDSCAPE MODE ===== */
     @media (orientation: landscape) {
-  .game {
-    flex-direction: row;
-    justify-content: space-evenly;
-  }
+      .game {
+        flex-direction: row;
+        justify-content: space-evenly;
+      }
 
-  .controls {
-    order: 1;
-  }
+      .controls {
+        margin-bottom: 0;
+      }
 
-  .board {
-    order: 2;
-    width: 60vmin;
-    height: 60vmin;
-  }
-}
-
+      .board {
+        width: 60vmin;
+        height: 60vmin;
+      }
+    }
   </style>
 </head>
+
 <body>
 
-<div class="game">
-  <h1>Tic Tac Toe AI</h1>
+  <div class="game">
+    <div class="controls">
+      <h1>Tic Tac Toe AI</h1>
 
-  <select id="difficulty">
-    <option value="easy">Mudah</option>
-    <option value="medium">Sedang</option>
-    <option value="hard">Sulit</option>
-  </select>
+      <select id="difficulty">
+        <option value="easy">Mudah</option>
+        <option value="medium">Sedang</option>
+        <option value="hard">Sulit</option>
+      </select>
 
-  <div class="board" id="board"></div>
+      <button onclick="resetGame()">Reset</button>
+      <div class="status" id="status"></div>
+    </div>
 
-  <button onclick="resetGame()">Reset</button>
-  <div class="status" id="status"></div>
-</div>
+    <div class="board" id="board"></div>
+  </div>
 
-<script>
-  const boardElement = document.getElementById("board");
-  const statusElement = document.getElementById("status");
-  const difficultySelect = document.getElementById("difficulty");
+  <script>
+    const boardEl = document.getElementById("board");
+    const statusEl = document.getElementById("status");
+    const difficultyEl = document.getElementById("difficulty");
 
-  let board = Array(9).fill("");
-  let gameOver = false;
+    const HUMAN = "X";
+    const AI = "O";
+    let board = Array(9).fill("");
+    let gameOver = false;
 
-  const HUMAN = "X";
-  const AI = "O";
-
-  function createBoard() {
-    boardElement.innerHTML = "";
-    board.forEach((cell, index) => {
-      const div = document.createElement("div");
-      div.className = "cell";
-      div.textContent = cell;
-      div.onclick = () => makeMove(index);
-      boardElement.appendChild(div);
-    });
-  }
-
-  function makeMove(index) {
-    if (board[index] || gameOver) return;
-
-    board[index] = HUMAN;
-    createBoard();
-
-    if (checkWinner(board, HUMAN)) {
-      statusElement.textContent = "Kamu menang!";
-      gameOver = true;
-      return;
+    function drawBoard() {
+      boardEl.innerHTML = "";
+      board.forEach((cell, i) => {
+        const div = document.createElement("div");
+        div.className = "cell";
+        div.textContent = cell;
+        div.onclick = () => playerMove(i);
+        boardEl.appendChild(div);
+      });
     }
 
-    if (isDraw()) {
-      statusElement.textContent = "Seri!";
-      gameOver = true;
-      return;
-    }
+    function playerMove(i) {
+      if (board[i] || gameOver) return;
 
-    setTimeout(aiMove, 300);
-  }
+      board[i] = HUMAN;
+      drawBoard();
 
-  function aiMove() {
-    let move;
-    const level = difficultySelect.value;
-
-    if (level === "easy") {
-      move = randomMove();
-    } else if (level === "medium") {
-      move = Math.random() < 0.5 ? randomMove() : bestMove();
-    } else {
-      move = bestMove();
-    }
-
-    board[move] = AI;
-    createBoard();
-
-    if (checkWinner(board, AI)) {
-      statusElement.textContent = "AI menang!";
-      gameOver = true;
-      return;
-    }
-
-    if (isDraw()) {
-      statusElement.textContent = "Seri!";
-      gameOver = true;
-    }
-  }
-
-  function randomMove() {
-    const empty = board
-      .map((v, i) => v === "" ? i : null)
-      .filter(v => v !== null);
-    return empty[Math.floor(Math.random() * empty.length)];
-  }
-
-  function bestMove() {
-    let bestScore = -Infinity;
-    let move;
-
-    board.forEach((cell, i) => {
-      if (cell === "") {
-        board[i] = AI;
-        let score = minimax(board, 0, false);
-        board[i] = "";
-        if (score > bestScore) {
-          bestScore = score;
-          move = i;
-        }
+      if (checkWin(HUMAN)) {
+        statusEl.textContent = "Kamu menang!";
+        gameOver = true;
+        return;
       }
-    });
 
-    return move;
-  }
+      if (isDraw()) {
+        statusEl.textContent = "Seri!";
+        gameOver = true;
+        return;
+      }
 
-  function minimax(newBoard, depth, isMaximizing) {
-    if (checkWinner(newBoard, AI)) return 10 - depth;
-    if (checkWinner(newBoard, HUMAN)) return depth - 10;
-    if (isDraw()) return 0;
-
-    if (isMaximizing) {
-      let best = -Infinity;
-      newBoard.forEach((cell, i) => {
-        if (cell === "") {
-          newBoard[i] = AI;
-          best = Math.max(best, minimax(newBoard, depth + 1, false));
-          newBoard[i] = "";
-        }
-      });
-      return best;
-    } else {
-      let best = Infinity;
-      newBoard.forEach((cell, i) => {
-        if (cell === "") {
-          newBoard[i] = HUMAN;
-          best = Math.min(best, minimax(newBoard, depth + 1, true));
-          newBoard[i] = "";
-        }
-      });
-      return best;
+      setTimeout(aiMove, 300);
     }
-  }
 
-  function checkWinner(b, player) {
-    const winPatterns = [
-      [0,1,2],[3,4,5],[6,7,8],
-      [0,3,6],[1,4,7],[2,5,8],
-      [0,4,8],[2,4,6]
-    ];
-    return winPatterns.some(p => p.every(i => b[i] === player));
-  }
+    function aiMove() {
+      let move;
+      const level = difficultyEl.value;
 
-  function isDraw() {
-    return board.every(cell => cell !== "");
-  }
+      if (level === "easy") {
+        move = randomMove();
+      } else if (level === "medium") {
+        move = Math.random() < 0.5 ? randomMove() : bestMove();
+      } else {
+        move = bestMove();
+      }
 
-  function resetGame() {
-    board = Array(9).fill("");
-    gameOver = false;
-    statusElement.textContent = "";
-    createBoard();
-  }
+      board[move] = AI;
+      drawBoard();
 
-  createBoard();
-</script>
+      if (checkWin(AI)) {
+        statusEl.textContent = "AI menang!";
+        gameOver = true;
+      } else if (isDraw()) {
+        statusEl.textContent = "Seri!";
+        gameOver = true;
+      }
+    }
 
-</body>
-</html>
+    function randomMove() {
+      const empty = board
+        .map((v, i) => (v === "" ? i : null))
+        .filter(v => v !== null);
+      return empty[Math.floor(Math.random() * empty.length)];
+    }
+
+    function bestMove() {
+      let bestScore = -Infinity;
+      let move;
+
+      board.forEach((cell, i) => {
+        if (cell === "") {
+          board[i] = AI;
+          const score = minimax(board, 0, false);
+          board[i] = "";
+          if (score > bestScore) {
+            bestScore = score;
+            move = i;
+          }
+        }
+      });
+
+      return move;
+    }
+
+    function minimax(b, depth, isMax) {
+      if (checkWinner(b, AI)) return 10 - depth;
+      if (checkWinner(b, HUMAN)) return depth - 10;
+      if (b.every(c => c !== "")) return 0;
+
+      if (isMax) {
+        let best = -Infinity;
+        b.forEach((c, i) => {
+          if (c === "") {
+            b[i] = AI;
+            best = Math.max(best, minimax(b, depth + 1, false));
+            b[i] = "";
+          }
+        });
+        return best;
+      } else {
+        let best = Infinity;
+        b.forEach((c, i) => {
+          if (c === "") {
+            b[i] = HUMAN;
+            best = Math.min(best, minimax(b, depth + 1, true));
+            b[i] = "";
+          }
+        });
+        return best;
+      }
+    }
+
+    function checkWin(p) {
+      return checkWinner(board, p);
+    }
+
+    function checkWinner(b, p) {
+      const win = [
+        [0,1,2],[3,4,5],[6,7,8],
+        [0,3,6],[1,4,7],[2,5,8],
+        [0,4,8],[2,4,6]
+      ];
+      return win.some(c => c.every(i => b
 
