@@ -2,7 +2,11 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>Tic Tac Toe AI</title>
+<div class="controls">
+  <h1>Tic Tac Toe AI</h1>
+  <select id="difficulty">...</select>
+  <button onclick="resetGame()">Reset</button>
+
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -15,15 +19,14 @@
     }
 
     .game {
-       width: 500vw; 
-      heigth: 100dvh;
-      background: #020617;
-      padding: 24px;
-      border-radius: o;
-      display: flex;
-      flx-direction: colum;
-      align-item: center;
-     justify-content: center;
+       width: 100vw;
+  min-height: 100dvh;
+  background: #020617;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
       
     }
 
@@ -36,19 +39,25 @@
       margin-bottom: 8px;
       border-radius: 6px;
     }
+    .controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
 
+    }
    .board {
-  width: 85vmin;
-  height: 85vmin;
+  width: 80vmin;
+  height: 80vmin;
   max-width: 420px;
   max-height: 420px;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 4vmin;
-  margin: 20px 0;
+  margin: 16px 0;
 }
 
-}
 
 .cell {
   aspect-ratio: 1 / 1;
